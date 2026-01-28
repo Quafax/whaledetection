@@ -34,7 +34,7 @@ wavelet = 'db4' #wavelet type for swt denoising
 level = 7 #level of swt denoising
 threshold = 0.03 #threshold for swt denoising
 mode = 'soft' #mode of thresholduing (soft, hard)
-species_list = ['HumpbackWhale', 'CommonDolphin', "SouthernRightWhale"] #list of species to process (unfortunatly the databased is closed atm so only this)
+species_list = ['Atlantic_Spotted_Dolphin', 'Bearded_Seal', 'Beluga,_White_Whale', 'Bottlenose_Dolphin', 'Bowhead_Whale', 'Clymene_Dolphin', 'Common_Dolphin', 'False_Killer_Whale', 'Fin,_Finback_Whale', 'Frasers_Dolphin', 'Grampus,_Rissos_Dolphin', 'Harp_Seal', 'Humpback_Whale', 'Killer_Whale', 'Leopard_Seal', 'Long-Finned_Pilot_Whale', 'Melon_Headed_Whale', 'Minke_Whale', 'Narwhal', 'Northern_Right_Whale', 'Pantropical_Spotted_Dolphin', 'Ross_Seal', 'Rough-Toothed_Dolphin', 'Short-Finned_Pacific_Pilot_Whale', 'Southern_Right_Whale', 'Sperm_Whale', 'Spinner_Dolphin', 'Striped_Dolphin', 'Walrus', 'White-beaked_Dolphin', 'White-sided_Dolphin']
 percentile = 70 #percentile for percentile based denoising
 #feats and labels for training 
 X_feats = []
@@ -220,11 +220,12 @@ def extract_mfcc_features(x, sr, n_mfcc, n_fft, hop_length, n_mels):
 
 
 ################Test and training the svm####################
-"""
+
 
 if __name__ == "__main__":
     #########################variables#########################
-    base_dir = "C:/Users/luede/Seafile/WhaleData"
+    #base_dir = "C:/Users/luede/Seafile/WhaleData" #base_dir of laptop
+    base_dir = "C:/Users/Admin/Seafile/WhaleData" #base_dir of desktop
     target_sr=16384
     n_mfcc=40
     use_denoise = True
@@ -232,10 +233,13 @@ if __name__ == "__main__":
     level = 7
     threshold = 0.03
     mode = 'soft'
-    species_list = ['HumpbackWhale', 'CommonDolphin',"SouthernRightWhale"]
+    species_list = species_list
+    n_fft = 1024
     X_feats = []
     y_labels = []
     file_paths = []
+
+  
 
 
 
@@ -262,7 +266,7 @@ if __name__ == "__main__":
                 y_labels.append(label)
                 file_paths.append(path)
     print("MFCC extraction complete.")
-
+    
     # daten normalisieren x sind features, y sind labels 
     scaler = StandardScaler()
     X_scaled = scaler.fit_transform(X_feats)
@@ -282,10 +286,15 @@ if __name__ == "__main__":
     acc = accuracy_score(y_test, y_pred)
     print("Test accuracy:", acc)
     print("Confusion matrix:\n", confusion_matrix(y_test, y_pred))
+    print("Anzahl species_list:", len(species_list))
+    print("Einzigartige Labels in y_labels:", np.unique(y_labels))
+    print("Einzigartige Labels in y_test:", np.unique(y_test))
+    print("Einzigartige Labels in union(y_test, y_pred):",
+      np.unique(np.concatenate([y_test, y_pred])))
     print("Classification report:\n", classification_report(y_test, y_pred, target_names=species_list))
 
 
-"""
+
 
 
 

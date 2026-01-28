@@ -6,8 +6,10 @@ import librosa
 import matplotlib.pyplot as plt
 import sounddevice as sd
 
-base_dir = "C:/Users/luede/Seafile/WhaleData"
-species  = "Humpbackwhale"
+#base_dir = "C:/Users/luede/Seafile/WhaleData" #base dir of laptop
+base_dir = "C:/Users/Admin/Seafile/WhaleData" #base dir of desktop
+species  = "Common_Dolphin"
+file = "0984_5801400J"
 sr = 16384
 n_mfcc=40
 use_denoise = True
@@ -20,12 +22,12 @@ percentile = 80
 
 #load a test file
 folder = os.path.join(base_dir, species)
-filename= os.listdir(folder)[0]
+filename = os.path.join(folder, file + ".wav")
 path = os.path.join(folder, filename)
-data, sr = librosa.load(path, sr=sr, mono=True)
+data, sr = librosa.load(path, sr=None, mono=True)
 x=data
 #denoise the test file
-
+print("sr:" + str(sr))
 
 #x= spectral_gating_denoise(x, sr, prop_decrease=1.0)
 #x= swt_denoise(x, level, wavelet)
