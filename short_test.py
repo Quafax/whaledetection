@@ -46,3 +46,5 @@ plt.tight_layout()
 plt.show()
 sd.play(x, sr)
 sd.wait()  # Wait until sound has finished playing
+
+###works
