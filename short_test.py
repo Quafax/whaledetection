@@ -6,8 +6,8 @@ import librosa
 import matplotlib.pyplot as plt
 import sounddevice as sd
 
-#base_dir = "C:/Users/luede/Seafile/WhaleData" #base dir of laptop
-base_dir = "C:/Users/Admin/Seafile/WhaleData" #base dir of desktop
+base_dir = "C:/Users/luede/Seafile/WhaleData" #base dir of laptop
+#base_dir = "C:/Users/Admin/Seafile/WhaleData" #base dir of desktop
 species  = "Common_Dolphin"
 file = "0984_5801400J"
 sr = 16384
@@ -15,7 +15,7 @@ n_mfcc=40
 use_denoise = True
 wavelet = 'db4'
 level = 7
-threshold = 0.15
+threshold = 0.03
 mode = 'soft'
 k_factors_mode = None #None, energy, or default
 percentile = 80
@@ -29,7 +29,7 @@ x=data
 #denoise the test file
 print("sr:" + str(sr))
 
-#x= spectral_gating_denoise(x, sr, prop_decrease=1.0)
+x= spectral_gating_denoise(x, sr, prop_decrease=1.0)
 #x= swt_denoise(x, level, wavelet)
 #x= swt_denoise_level_based(x, wavelet, level, k_factors_mode, mode)
 #x= denoise_signal_percentile(x, wavelet, level, percentile)
@@ -44,7 +44,3 @@ plt.colorbar(format='%+2.0f dB')
 plt.title('Spektrogramm')
 plt.tight_layout()
 plt.show()
-sd.play(x, sr)
-sd.wait()  # Wait until sound has finished playing
-
-###works
