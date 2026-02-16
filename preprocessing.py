@@ -5,7 +5,7 @@ import numpy as np
 import librosa
 import pywt
 import noisereduce as nr
-
+from debugging import debug_plot_swt_reconstructed_details
 
 # =================================================================================================================================================
 # PADDING FUNCTIONS
@@ -167,7 +167,7 @@ def main_denoise(padding, x, level, wavelet, k_factors_method, use_debugging, th
     #variables
     threshold = []
     new_coeffs = []
-    k = []
+    k_factors   = []
     #padding
     if padding =="zero":
         x= zero_pad(x, level)
@@ -215,10 +215,18 @@ def main_denoise(padding, x, level, wavelet, k_factors_method, use_debugging, th
     elif threshold_method == "pywt":
         new_coeffs = pywt_threshold(coeffs,threshold)
 
+    # debugging
+    if use_debugging:
+        debug_plot_swt_reconstructed_details(
+        new_coeffs, wavelet, sr=sr,   # sr=None => Samples-Achse
+        title="Details nach Thresholding (vor Rekonstruktion)",
+        normalize_ylim=True,
+        show=False  # wenn du später plt.show() machst
+    )
 
     #recosntruct
     signal = swt_reconstruct(new_coeffs, wavelet,level)
-
+    
 
     if threshold_method == "noisered":
         signal = spectral_gating_denoise(x,sr, prop_decrease=1.0)
@@ -234,7 +242,7 @@ if __name__ == "__main__":
     import os
     from debugging import plot_spec
     #direction
-    base_dir = "C:/Users/luede/Seafile/WhaleData" #base dir of desktop
+    base_dir = "C:/Users/admin/Seafile/WhaleData" #base dir of desktop
     species  = "Common_Dolphin"
     file = "0984_5801400J"
     folder = os.path.join(base_dir, species)
@@ -242,7 +250,10 @@ if __name__ == "__main__":
     path = os.path.join(folder, filename)
     data, sr = librosa.load(path, sr=None, mono=True)
     plot_spec(data, sr)
-    signal = main_denoise(padding="zero", x=data, level=7, wavelet='db4', k_factors_method=None, use_debugging=False, threshold_method="noisered", threshold_rule= "percentile",fixed_threshold=0.03, percentile = 80)
+    signal = main_denoise(padding="zero", x=data, level=7, wavelet='db4',
+                          k_factors_method="energy", use_debugging=True,
+                          threshold_method="soft", threshold_rule= "percentile",
+                          fixed_threshold=0.03, percentile = 70)
     plot_spec(signal, sr)
 
 
