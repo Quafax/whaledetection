@@ -116,7 +116,7 @@ def plot_spectrogram(y, sr, title="Spectrogram", n_fft=2048, hop_length=512, cma
 
 
 if __name__ == "__main__":
-    base_dir = "C:/Users/Admin/Seafile/WhaleData"
+    base_dir = "C:/Users/luede/Seafile/WhaleData"
     species = "Common_Dolphin"
     species2 = "Northern_Right_Whale"
     file2 ="1194_5900300B "#"0030_56018002"    
@@ -159,5 +159,3 @@ if __name__ == "__main__":
                     continue
     
     plt.show()  
-    sd.play(denoised_signal, sr)
-    sd.wait()

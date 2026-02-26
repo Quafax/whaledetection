@@ -7,6 +7,10 @@ import noisereduce as nr
 import pywt
 import sounddevice as sd
 
+def swt_detail_band(sr, j):
+    f_lo = sr / (2**(j+1))
+    f_hi = sr / (2**j)
+    return f_lo, f_hi
 
 def plot_swt_level_bands_before_after(coeffs_before, coeffs_after, sr, wavelet,
                                       keep="detail", crop_len=None,
@@ -110,38 +114,55 @@ def threshold(coeffs, threshold):
     return new_coeffs
 
 if __name__ == "__main__":
-    base_dir = "C:/Users/luede/Seafile/WhaleData"
+    base_dir ="C:/Users/luede/Seafile/WhaleData/Orginial_from_Watkins"
+    #base_dir = "C:/Users/luede/Seafile/WhaleData"
     species = "Common_Dolphin"
+    species ="Teststreams"
     species2 = "Northern_Right_Whale"
-    file2 ="1194_5900300B "#"0030_56018002"    
-    file = "0984_5801400J"
+    file2 ="1194_5900300B.wav"#"0030_56018002"    
+    file = "0984_5801400J.wav"
+    file3 = "0466_5801402C.wav"
+    fileStream="longhumpback.wav"
+    filename= fileStream
     level = 7
-    wavelet = "db4"
-    thr = 0.005
+    wavelet = "sym8"
+    thr = 0.01
+    percentile = 80
+    coeffs_after = []
     folder = os.path.join(base_dir, species)
-    for filename in os.listdir(folder):
-                if not filename.lower().endswith((".wav", ".flac", ".aiff", ".aif")):
-                    continue
 
-                path = os.path.join(folder, filename)
-                try:
-                    data, sr = librosa.load(path, sr=None, mono=True)
-                    orig_padded = reflect_padding(data, level=level)
-                    coeffs_before = pywt.swt(orig_padded, wavelet=wavelet, level=level, start_level=0, axis=-1)
-                    coeffs_after = threshold(coeffs_before, thr)
-                    denoised_signal = pywt.iswt(coeffs_after, wavelet= wavelet)
-                    denoised_signal_nr = nr.reduce_noise(denoised_signal,sr=sr, prop_decrease=1.0, stationary = False)
-                    plot_spectrogram(data[:len(data)], sr, title="original Signal")
-                    plot_spectrogram(denoised_signal_nr[:len(data)], sr, title="Denoised Signal")
-                    plot_swt_level_bands_before_after(
-                        coeffs_before, coeffs_after, sr, wavelet=wavelet,
-                        keep="detail",         # cD-Bänder
-                        crop_len=len(data)
-                    )
+    path = os.path.join(folder, filename)
 
-
-                except Exception as e:
-                    print(f"Error loading {path}: {e}")
-                    continue
-
+    data, sr = librosa.load(path, sr=None, mono=True)
+    print(sr)
+    orig_padded = reflect_padding(data, level=level)
+    ######################
+    #orig_padded = nr.reduce_noise(orig_padded, sr= sr, prop_decrease=1.0,stationary=False)
+    #plot_spectrogram(orig_padded[:len(data)], sr, title="Denoised Signal with NR")
+###############################
+    coeffs_before = pywt.swt(orig_padded, wavelet=wavelet, level=level, start_level=0, axis=-1)
+    #coeffs_after = threshold(coeffs_before, thr)
+    for inx,(cA, cD) in enumerate(coeffs_before,start=0):
+        j= level-inx
+        t = np.percentile(np.abs(cD), percentile)
+        f_lo, f_hi = swt_detail_band(sr, j)
+        print(f"Level {j}: D{j} ~ {f_lo:.1f} .. {f_hi:.1f} Hz")
+        if j>=3:
+            t=np.inf
+        if j<=2:
+            t=0.1
+        if j==2:
+            t=0.013
+        print("Threshold="+str(t))
+        #cD_new = np.sign(cD) * np.maximum(np.abs(cD) - t, 0.0)  # soft
+        if np.isinf(t):
+            cD_new = np.zeros_like(cD)
+        else:
+            cD_new = pywt.threshold(cD, t, mode="soft")
+        coeffs_after.append((cA, cD_new))
+    denoised_signal = pywt.iswt(coeffs_after, wavelet= wavelet)
+    #denoised_signal_nr = nr.reduce_noise(denoised_signal,sr=sr, prop_decrease=1.0, stationary = False)
+    plot_spectrogram(data[:len(data)], sr, title="original Signal")
+    plot_spectrogram(denoised_signal[:len(data)], sr, title="Denoised Signal")
+    #plot_spectrogram(denoised_signal_nr[:len(data)], sr, title="Denoised Signal with NR")
     plt.show()

@@ -1,0 +1,14 @@
+swt:
+  level: 4 #int
+  swt_frame_length: 2000 # int
+  swt_hop_ratio: 0.5 #float
+  axis: 0 # int
+data:
+  base_dir: "C:/Users/luede/Seafile/WhaleData" #string
+  species_list: ["Northern_Right_Whale"]
+load:
+  sr: 44032 #int
+
+mfcc:
+  tukey_alpha: 0.5 #float
+  mfcc_frame_length: 20
