@@ -1,0 +1,7 @@
+numpy
+librosa
+matplotlib
+PyWavelets
+PyYAML
+sounddevice
+noisereduce
