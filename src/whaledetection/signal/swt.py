@@ -1,7 +1,5 @@
-from whaledetection.config_loader import load_config
+from whaledetection import RingBufferMono
 import pywt
-
-cfg = load_config("configs/config.yaml")
 
 def swt_deconstruct(signal, wavelet="db4", level=3, axis=0):
     coeffs=pywt.swt(signal=signal,wavelet=wavelet,level=level, axis=axis)

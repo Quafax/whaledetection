@@ -81,7 +81,7 @@ def gp_soft_threshold(x, lam, sigma):
 
 
 if __name__ == "__main__":
-    test_sound = "C:/Users/Admin/Seafile/WhaleData/Common_Dolphin/0017_5801403R.wav"
+    test_sound = "C:/Users/luede/Seafile/WhaleData/Common_Dolphin/0017_5801403R.wav"
     #test_sound = "C:/Users/luede/Seafile/WhaleData/NARW/8101301I.wav"
     #test_sound = "C:/Users/luede/Seafile/WhaleData/CommonDolphin/5801400J.wav"
     #test_sound = "C:/Users/luede/Seafile/WhaleData/SouthernRightWhale/8300200C.wav"

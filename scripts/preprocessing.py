@@ -1,24 +1,44 @@
-import sys
-print("sys.path =", sys.path)
-from whaledetection.config_loader import load_config
 
-print(sys.path[:3])
-from tests.test_ringbuffer_ai import RingBufferMono, iter_mono_windows_from_file
+from whaledetection.config.config_loader import load_config
+import librosa
 import os
-species_list: list = ["Northern_Right_Whale"]
-base_dir: str = "C:/Users/luede/Seafile/WhaleData"
-filename="0074_7001800B"
+from whaledetection.plotting import plot_spectrogram
+from whaledetection.framing import window_signal, overlap_add
+
+#später egal
+import matplotlib.pyplot as plt
+cfg = load_config("configs/config.yaml")
+
+species_list = cfg.load.species_list
+base_dir_in = cfg.load.base_dir_in
+sr= cfg.load.sr
+filename="0074_7001800B.wav"
 wavelet = "db4"
+window_length =2 #in s
+swt_hop_length = cfg.swt.swt_hop_length
+swt_frame_length = cfg.swt.swt_frame_length
+print("swt hop length:"+str(swt_hop_length))
+print("swt frame length:"+str(swt_frame_length))
+
+
+#load signal
 for label, sp in enumerate(species_list):
-    folder = os.path.join(base_dir, sp)
-    #debugging
-    if not os.path.isdir(folder):
-        print(f"WARNING: folder not found: {folder}")
+    folder = os.path.join(base_dir_in, sp)
+    if not filename.lower().endswith((".wav", ".flac", ".aiff", ".aif")):
         continue
+    #can loop with: for filename in os.listdir(folder):
     path = os.path.join(folder, filename)
-    try:
-        for window, sr in iter_mono_windows_from_file(path, win_s=2.0, hop_ratio=0.5):
-            pass
-    except Exception as e:
-        print(f"Error loading {path}: {e}")
-        continue
+    signal, sr = librosa.load(path, sr=sr, mono=True)
+
+#window into 2s windows
+windows = window_signal(signal,sr=sr,window_length=swt_frame_length, hop_length=swt_hop_length)
+signal = overlap_add(windows=windows,hop_length=swt_hop_length,window=None)
+plot_spectrogram(signal,sr)
+plt.show()
+#swt
+#threshold with sureshrink
+# iswt
+
+#mfccs
+
+

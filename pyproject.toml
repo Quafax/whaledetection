@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "Whaledetection"
 version = "0.0.1"
-dependencies = ["numpy","librosa","matplotlib","PyWavelets","PyYAML","sounddevice","noisereduce"]
+dependencies = ["seaborn","numpy","librosa","matplotlib","PyWavelets","PyYAML","sounddevice","noisereduce","datasets","huggingface_hub","torch", "pydub"]
 
 [tool.setuptools]
 package-dir = {"" = "src"}
