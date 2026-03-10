@@ -1,4 +1,3 @@
-from whaledetection import RingBufferMono
 import pywt
 
 def swt_deconstruct(signal, wavelet="db4", level=3, axis=0):
@@ -8,3 +7,4 @@ def swt_deconstruct(signal, wavelet="db4", level=3, axis=0):
 def swt_reconstruct(coeffs, wavelet):
     signal=pywt.iswt(coeffs=coeffs, wavelet=wavelet)
     return signal
+

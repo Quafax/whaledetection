@@ -4,6 +4,8 @@ import requests
 import io
 from pydub import AudioSegment
 
+#pretty slow. Could optimize by parallel loading but its enough for this size
+
 assets_url = "https://raw.githubusercontent.com/zooniverse/WhaleFM/master/csv/whale_fm_anon_04-03-2015_assets.csv"
 
 

@@ -2,8 +2,8 @@
 from whaledetection.config.config_loader import load_config
 import librosa
 import os
-from whaledetection.plotting import plot_spectrogram
-from whaledetection.framing import window_signal, overlap_add
+from whaledetection.visualizations.plotting import plot_spectrogram
+from whaledetection.signal.framing import window_signal, overlap_add
 
 #später egal
 import matplotlib.pyplot as plt

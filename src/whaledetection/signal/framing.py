@@ -1,5 +1,5 @@
 import numpy as np
-from whaledetection.padding import padding
+from whaledetection.signal.padding import padding
 def window_signal(signal, sr , window_length, hop_length=None):
     """
     Cut signal into windows

@@ -15,6 +15,7 @@ mfcc:
   n_mfcc: 13
   hop_length: 0.01
   n_fft: 2048
+  feature_set: ["mfcc"]
 loadDatabase:
   database_base_dir_in: ""
   database_base_dir_out: "C:/Users/luede/Downloads/export_whales"
@@ -24,3 +25,12 @@ svm:
   kernel: "rbf"
   model_dir_out: "C:/Users/luede/Documents/Github/whaledetection/models/svm"
   test_size: 0.2
+
+rf:
+  random_state: 42
+  model_dir_out: "C:/Users/luede/Documents/Github/whaledetection/models/rf"
+  test_size: 0.2
+  estimators: 300
+
+feature:
+  feature_type: "mfcc"

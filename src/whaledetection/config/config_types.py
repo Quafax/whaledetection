@@ -13,11 +13,12 @@ class SwtCfg:
     swt_hop_length:int
 @dataclass
 class MfccCfg:
-    mfcc_frame_length:int
+    mfcc_frame_length: float
     tukey_alpha:float
     hop_length: float
     n_mfcc: int
     n_fft: int
+    feature_set: list[str]
 @dataclass
 class loadDatabaseCfg:
     database_base_dir_in: str
@@ -29,6 +30,18 @@ class svmCfg:
     random_state: int
     model_dir_out: str
     test_size: float
+
+@dataclass
+class rfCfg:
+    random_state: int
+    model_dir_out: str
+    test_size: float
+    estimators: int
+
+@dataclass
+class featureCfg:
+    feature_type: str
+
 @dataclass
 class AppCfg:
     swt: SwtCfg
@@ -36,3 +49,5 @@ class AppCfg:
     loadSignal:loadSignalCfg
     loadDatabase: loadDatabaseCfg
     svm: svmCfg
+    rf: rfCfg
+    feature: featureCfg

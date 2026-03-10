@@ -5,13 +5,12 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
-from whaledetection.config.config_loader import load_config
 
 def train_model(X, y,cfg):
     test_size= cfg.svm.test_size
     random_state=cfg.svm.random_state
     kernel = cfg.svm.kernel
-    model_path= cfg.svm.model_dir_out
+
     X_train, X_test, y_train, y_test = train_test_split(
         X,
         y,
