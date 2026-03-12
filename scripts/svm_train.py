@@ -21,7 +21,7 @@ def main():
     preds,
     class_names=classes,
     title="SVM Confusion Matrix",
-    save_path="results/svm/svm_confusion_matrix_mfcc+deltas.png"
+    save_path="results/svm/svm_confusion_matrix_mfcc_swt.png"
 )
     
     plot_confusion_matrix_seaborn(
@@ -29,13 +29,13 @@ def main():
     preds,
     class_names=classes,
     title="SVM Confusion Matrix (Normalized)",
-    save_path="results/svm/svm_confusion_matrix_seaborn_mfcc+deltas.png",
+    save_path="results/svm/svm_confusion_matrix_seaborn_mfcc_swt.png",
     normalize=True,
 )
 #make sure path exists
     model_path = Path(cfg.svm.model_dir_out)
     if model_path.suffix == "":
-        model_path = model_path / "svm_mffc_deltas_model.joblib"
+        model_path = model_path / "svm_mffc_swt_model.joblib"
     model_path.parent.mkdir(parents=True, exist_ok=True)
 
     save_model(model, model_path)

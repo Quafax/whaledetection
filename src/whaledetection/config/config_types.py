@@ -11,6 +11,19 @@ class SwtCfg:
     swt_frame_length:int
     swt_hop_ratio:int
     swt_hop_length:int
+    k:float
+    t_mode:str
+    t_meth:str
+    wavelet:str
+    axis: int
+    level:int
+@dataclass
+class padCfg:
+    pad_mode: str
+@dataclass
+class denoiseCfg:
+    method: str
+
 @dataclass
 class MfccCfg:
     mfcc_frame_length: float
@@ -51,3 +64,5 @@ class AppCfg:
     svm: svmCfg
     rf: rfCfg
     feature: featureCfg
+    pad:padCfg
+    denoise: denoiseCfg

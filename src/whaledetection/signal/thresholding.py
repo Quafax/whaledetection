@@ -1,77 +1,66 @@
 import numpy as np
 
-def sure_threshold(coeffs,sigmas=None):
+def MAD(signal):
+    return np.median(np.abs(signal - np.median(signal)))
+
+def MAD_level_based(coeffs):
+    mads=[]
+    for cA,cD in coeffs:
+        mads.append(MAD(cD))
+    return np.asarray(mads,dtype=float)
+
+def sigma_from_MAD(mads,k=1.4826):
+    return k* np.asarray(mads, dtype=float)
+
+def visu_threshold(sigmas,signal_length):
+    """
+    T_j = sigma_j * sqrt(2 log N)
+    """
+    sigmas = np.asarray(sigmas,dtype=float)
+    return sigmas * np.sqrt(2*np.log(signal_length))
+
+def sure_threshold(sigmas, coeffs):
     thresholds=[]
-    n=len(cD)
-    if sigmas ==None:
-        mads = MAD_level_based(coeffs)
-        sigmas = gauss_sigma_level_based(mads)
-    for j,(cA,cD) in enumerate (coeffs):
+
+    for j, (cA,cD) in enumerate(coeffs):
         sigma = max(sigmas[j], 1e-12)
-        #normalize with sigma
-        w = cD / sigma
-        #get candidates for thresholds
-        a = np.sort(np.abs(w))
-        a2 = a ** 2
+        n = len(cD)
 
-        cumsum_a2 = np.cumsum(a2)
+        w = np.abs(cD) / sigma
+        w_sorted = np.sort(w)
+        w2 = w_sorted ** 2
 
-        k = np.arange(1, n + 1)
+        cumsum_w2 = np.cumsum(w2)
+        k_inx = np.arange(1, n + 1)
 
-        risks = n - 2 * k + cumsum_a2 + (n - k) * a2
+        risks = n - 2 * k_inx+ cumsum_w2 + (n - k_inx) * w2
 
         idx = np.argmin(risks)
-        t_sure = a[idx]
-
+        t_sure = w_sorted[idx]
         t_visu = np.sqrt(2 * np.log(n))
 
         T = sigma * min(t_sure, t_visu)
+
         thresholds.append(T)
 
-    return np.array(thresholds)
+    return np.asarray(thresholds)
 
-
-def visu_threshold(sigmas,signal_length):
+def bayes_threshold(sigmas, coeffs):
     thresholds=[]
-    N = signal_length
-    thresholds = sigmas * np.sqrt(2 * np.log(N))
-    return thresholds
+    #take global sigma for noise
+    sigma_noise = max(sigmas[0], 1e-12)
 
-def bayes_threshold(coeffs):
-#works atm for the first level. Possibly be optimized by level dependencies
-    mads = MAD_level_based(coeffs)
-    sigmas = gauss_sigma_level_based(mads)
+    for cA, cD in coeffs:
 
-    sigma_n = sigmas[0]
-    sigma_n2 = sigma_n**2
+        sigma_y = np.std(cD)
+        sigma_x_sq = max(sigma_y**2 - sigma_noise**2, 0)
+        sigma_x = np.sqrt(sigma_x_sq)
 
-    thresholds = []
-
-    for j, (cA, cD) in enumerate(coeffs):
-
-        sigma_y2 = np.mean(cD**2)
-
-        sigma_x2 = max(sigma_y2 - sigma_n2, 0)
-        sigma_x = np.sqrt(sigma_x2)
-
-        if sigma_x == 0:
+        if sigma_x < 1e-12:
             T = np.max(np.abs(cD))
         else:
-            T = sigma_n2 / sigma_x
+            T = (sigma_noise**2) / sigma_x
 
         thresholds.append(T)
-    return np.array(thresholds)
 
-def MAD_level_based(coeffs):
-    mads = []
-    for j, (cA, cD) in enumerate(coeffs):
-        mad_j = np.median(np.abs(cD))
-        mads.append(mad_j)
-    return mads
-
-def gauss_sigma_level_based(mads):
-    return np.array(mads)* (1/ 0.6745)
-
-def sigma_level_based(mads,k):
-    return np.array(mads)*k
-
+    return np.asarray(thresholds)

@@ -1,6 +1,9 @@
 from pathlib import Path
 import numpy as np
 import librosa
+import noisereduce as nr
+
+from whaledetection.signal.swt import swt_denoise
 
 from whaledetection.features.mfcc import extract_mfcc_features
 from whaledetection.features.vggish import extract_vggish_features
@@ -27,7 +30,19 @@ def load_dataset(cfg):
         for wav_file in class_dir.glob("*.wav"):
             try:
                 signal, _ = librosa.load(wav_file, sr=sr,mono=True)
-                #signal, sr, n_mfcc,frame_length,hop_length,n_fft
+
+                if cfg.denoise.method.lower() == "swt":
+                    signal = swt_denoise(signal,
+                                        wavelet = cfg.swt.wavelet,
+                                        level=cfg.swt.level,
+                                        axis=-1,
+                                        pad_mode=cfg.pad.pad_mode,
+                                        t_mode=cfg.swt.t_mode,
+                                        thresholding=cfg.swt.t_meth,
+                                        k=cfg.swt.k
+                                        )   
+                elif cfg.denoise.method.lower() == "noisereduce":
+                    signal = nr.reduce_noise(signal, sr)
 
 
                 if feature_type == "mfcc":

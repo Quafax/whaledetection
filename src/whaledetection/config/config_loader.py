@@ -1,5 +1,5 @@
 import yaml
-from whaledetection.config.config_types import featureCfg,SwtCfg, rfCfg,AppCfg,MfccCfg,loadSignalCfg, loadDatabaseCfg, svmCfg
+from whaledetection.config.config_types import padCfg,featureCfg,SwtCfg, rfCfg,AppCfg,MfccCfg,loadSignalCfg, loadDatabaseCfg, svmCfg, denoiseCfg
 from pathlib import Path
 
 def load_config(path: str | Path) -> AppCfg:
@@ -38,15 +38,32 @@ def load_config(path: str | Path) -> AppCfg:
     swt_frame_length = swt_raw["swt_frame_length"]
     swt_hop_ratio = swt_raw["swt_hop_ratio"]
     swt_hop_length = int(swt_frame_length*swt_hop_ratio*sr)
+    k = swt_raw["k"]
+    level=swt_raw["level"]
+    wavelet = swt_raw["wavelet"]
+    t_mode = swt_raw["t_mode"]
+    t_meth=swt_raw["t_meth"]
+    axis=swt_raw["axis"]
     swt = SwtCfg(swt_frame_length=swt_frame_length,
                  swt_hop_ratio=swt_hop_ratio,
-                 swt_hop_length=swt_hop_length)
+                 swt_hop_length=swt_hop_length,
+                 k=k,
+                 wavelet=wavelet,
+                 t_mode=t_mode,
+                 t_meth=t_meth,
+                 axis=axis,
+                 level=level)
 
     loadDatabase_raw = raw["loadDatabase"]
     database_base_dir_in = loadDatabase_raw["database_base_dir_in"]
     database_base_dir_out = loadDatabase_raw["database_base_dir_out"]
     loadDatabase = loadDatabaseCfg(database_base_dir_in=database_base_dir_in,
                                     database_base_dir_out=database_base_dir_out)
+
+    pad_raw = raw["pad"]
+    pad_mode=pad_raw["pad_mode"]
+    pad = padCfg(pad_mode=pad_mode)
+
 
     svm_raw = raw["svm"]
     random_state = svm_raw["random_state"]
@@ -72,10 +89,16 @@ def load_config(path: str | Path) -> AppCfg:
     feature_type = feature_raw["feature_type"]
     feature = featureCfg(feature_type=feature_type)
 
-    return AppCfg(swt=swt,
+    denoise_raw = raw["denoise"]
+    method = denoise_raw["method"]
+    denoise = denoiseCfg(method=method)
+
+    return AppCfg(pad=pad,
+                  swt=swt,
                   mfcc=mfcc,
                   loadSignal=loadSignal,
                   loadDatabase=loadDatabase,
                   svm=svm,
                   rf=rf,
-                  feature=feature)
+                  feature=feature,
+                  denoise=denoise)

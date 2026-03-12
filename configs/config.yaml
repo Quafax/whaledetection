@@ -2,8 +2,17 @@ swt:
   level: 4 #int
   swt_frame_length: 2 # int in seconds
   swt_hop_ratio: 0.5 #float
-  axis: 0 # int
+  axis: -1 # int
+  k: 1.4826 #float
+  wavelet: "db4" #str
+  t_mode: "sure" #str
+  t_meth: "soft" #str
 
+denoise:
+  method: "swt"
+pad:
+  pad_mode: "reflect" #str
+  
 loadSignal:
   sr: 44032 #int
   signal_base_dir_in: "C:/Users/luede/Seafile/WhaleData"
