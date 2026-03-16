@@ -37,6 +37,46 @@ def build_model(input_dim: int, num_classes: int, cfg):
 
     return model
 
+def fit_model(X_train,y_train,cfg,X_val=None,y_val=None):
+    scaler = StandardScaler()
+    X_train_scaled = scaler.fit_transform(X_train)
+
+    num_classes = len(np.unique(y_train))
+    input_dim = X_train_scaled.shape[1]
+
+    tf.keras.utils.set_random_seed(cfg.mlp.random_state)
+
+    model = build_model(input_dim=input_dim, num_classes=num_classes, cfg=cfg)
+
+    callbacks = [
+        tf.keras.callbacks.EarlyStopping(
+            monitor="val_loss" if X_val is not None else "loss",
+            patience=cfg.mlp.patience,
+            restore_best_weights=True,
+        )
+    ]
+
+    fit_kwargs = dict(
+        x=X_train_scaled,
+        y=y_train,
+        epochs=cfg.mlp.epochs,
+        batch_size=cfg.mlp.batch_size,
+        callbacks=callbacks,
+        verbose=1,
+    )
+
+    if X_val is not None and y_val is not None:
+        X_val_scaled = scaler.transform(X_val)
+        fit_kwargs["validation_data"] = (X_val_scaled, y_val)
+
+    history = model.fit(**fit_kwargs)
+
+    bundle = {
+        "model": model,
+        "scaler": scaler,
+        "history": history.history,
+    }
+    return bundle
 
 def train_model(X, y, cfg):
     test_size = cfg.mlp.test_size
@@ -50,43 +90,13 @@ def train_model(X, y, cfg):
         stratify=y,
     )
 
-    scaler = StandardScaler()
-    X_train_scaled = scaler.fit_transform(X_train)
-    X_test_scaled = scaler.transform(X_test)
+    bundle = fit_model(X_train, y_train, cfg, X_val=X_test, y_val=y_test)
 
-    num_classes = len(np.unique(y))
-    input_dim = X_train_scaled.shape[1]
-
-    model = build_model(input_dim=input_dim, num_classes=num_classes, cfg=cfg)
-
-    callbacks = [
-        tf.keras.callbacks.EarlyStopping(
-            monitor="val_loss",
-            patience=cfg.mlp.patience,
-            restore_best_weights=True,
-        )
-    ]
-
-    history = model.fit(
-        X_train_scaled,
-        y_train,
-        validation_data=(X_test_scaled, y_test),
-        epochs=cfg.mlp.epochs,
-        batch_size=cfg.mlp.batch_size,
-        callbacks=callbacks,
-        verbose=1,
-    )
-
-    probs = model.predict(X_test_scaled, verbose=0)
+    X_test_scaled = bundle["scaler"].transform(X_test)
+    probs = bundle["model"].predict(X_test_scaled, verbose=0)
     preds = np.argmax(probs, axis=1)
 
     print(classification_report(y_test, preds))
-
-    bundle = {
-        "model": model,
-        "scaler": scaler,
-        "history": history.history,
-    }
 
     return bundle, y_test, preds
 

@@ -6,7 +6,8 @@ swt:
   k: 1.4826 #float
   wavelet: "db4" #str
   t_mode: "sure" #str
-  t_meth: "soft" #str
+  t_meth: "soft" #str , hard or garotte?
+  percentile: 80
 
 mlp:
   random_state: 42

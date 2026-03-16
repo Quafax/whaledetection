@@ -17,6 +17,7 @@ class SwtCfg:
     wavelet:str
     axis: int
     level:int
+    percentile: float
 
 @dataclass
 class mlpCfg:

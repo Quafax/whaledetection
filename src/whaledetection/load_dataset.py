@@ -39,7 +39,8 @@ def load_dataset(cfg):
                                         pad_mode=cfg.pad.pad_mode,
                                         t_mode=cfg.swt.t_mode,
                                         thresholding=cfg.swt.t_meth,
-                                        k=cfg.swt.k
+                                        k=cfg.swt.k,
+                                        percentile=cfg.swt.percentile
                                         )   
                 elif cfg.denoise.method.lower() == "noisereduce":
                     signal = nr.reduce_noise(signal, sr)

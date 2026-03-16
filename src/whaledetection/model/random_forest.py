@@ -6,6 +6,18 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
 
+def build_model(cfg):
+    return Pipeline([("scaler", StandardScaler()),
+                     ("rf", RandomForestClassifier(n_estimators=cfg.rf.estimators,
+                                                   max_depth=None,
+                                                   random_state=cfg.rf.random_state,
+                                                   n_jobs=-1,),),])
+
+def fit_model(X_train,y_train,cfg):
+    model=build_model(cfg)
+    model.fit(X_train,y_train)
+    return model
+
 def train_model(X, y,cfg):
     test_size= cfg.rf.test_size
     random_state=cfg.rf.random_state
@@ -18,22 +30,12 @@ def train_model(X, y,cfg):
         stratify=y
     )
 
-    pipeline = Pipeline([
-        ("scaler", StandardScaler()), #useless but for comparability
-        ("rf", RandomForestClassifier(
-            n_estimators=cfg.rf.estimators,
-            max_depth=None,
-            random_state=random_state,
-            n_jobs=-1 
-        ))
-    ])
-    pipeline.fit(X_train, y_train)
-
-    preds = pipeline.predict(X_test)
+    model = fit_model(X_train,y_train,cfg)
+    preds = model.predict(X_test)
 
     print(classification_report(y_test, preds))
 
-    return pipeline, y_test, preds
+    return model, y_test, preds
 
 def save_model(model, path):
 

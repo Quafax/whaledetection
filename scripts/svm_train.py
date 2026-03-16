@@ -35,7 +35,7 @@ def main():
 #make sure path exists
     model_path = Path(cfg.svm.model_dir_out)
     if model_path.suffix == "":
-        model_path = model_path / "svm_mffc_swt_model.joblib"
+        model_path = model_path / "svm_mfcc_swt_model.joblib"
     model_path.parent.mkdir(parents=True, exist_ok=True)
 
     save_model(model, model_path)

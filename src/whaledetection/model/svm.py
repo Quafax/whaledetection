@@ -6,7 +6,17 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
 
+def build_model(cfg):
+    return Pipeline([("scaler", StandardScaler()),
+                     ("svm", SVC(kernel=cfg.svm.kernel, probability=True)),])
+
+def fit_model(X_train, y_train,cfg):
+    model=build_model(cfg)
+    model.fit(X_train,y_train)
+    return model
+
 def train_model(X, y,cfg):
+
     test_size= cfg.svm.test_size
     random_state=cfg.svm.random_state
     kernel = cfg.svm.kernel
@@ -19,18 +29,13 @@ def train_model(X, y,cfg):
         stratify=y
     )
 
-    pipeline = Pipeline([
-        ("scaler", StandardScaler()),
-        ("svm", SVC(kernel=kernel, probability=True))
-    ])
+    model =fit_model(X_train, y_train, cfg)
 
-    pipeline.fit(X_train, y_train)
-
-    preds = pipeline.predict(X_test)
+    preds = model.predict(X_test)
 
     print(classification_report(y_test, preds))
 
-    return pipeline, y_test, preds
+    return model, y_test, preds
 
 def save_model(model, path):
 

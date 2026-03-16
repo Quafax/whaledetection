@@ -43,6 +43,7 @@ def load_config(path: str | Path) -> AppCfg:
     wavelet = swt_raw["wavelet"]
     t_mode = swt_raw["t_mode"]
     t_meth=swt_raw["t_meth"]
+    percentile=swt_raw["percentile"]
     axis=swt_raw["axis"]
     swt = SwtCfg(swt_frame_length=swt_frame_length,
                  swt_hop_ratio=swt_hop_ratio,
@@ -52,7 +53,8 @@ def load_config(path: str | Path) -> AppCfg:
                  t_mode=t_mode,
                  t_meth=t_meth,
                  axis=axis,
-                 level=level)
+                 level=level,
+                 percentile=percentile)
 
     loadDatabase_raw = raw["loadDatabase"]
     database_base_dir_in = loadDatabase_raw["database_base_dir_in"]
