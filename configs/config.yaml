@@ -8,6 +8,21 @@ swt:
   t_mode: "sure" #str
   t_meth: "soft" #str
 
+mlp:
+  random_state: 42
+  test_size: 0.2
+  model_dir_out: "C:/Users/luede/Documents/Github/whaledetection/models/mlp"
+  epochs: 50
+  patience: 8
+  dropout: 0.2
+  hidden_1: 512
+  hidden_2: 256
+  hidden_3: 128
+  hidden_4: 64
+  batch_size: 128
+  learning_rate: 0.001
+
+
 denoise:
   method: "swt"
 pad:
@@ -24,7 +39,7 @@ mfcc:
   n_mfcc: 13
   hop_length: 0.01
   n_fft: 2048
-  feature_set: ["mfcc"]
+  feature_set: ["mfcc"] # mfcc with delta, or delta2, vggish is not implemented yet
 loadDatabase:
   database_base_dir_in: ""
   database_base_dir_out: "C:/Users/luede/Downloads/export_whales"

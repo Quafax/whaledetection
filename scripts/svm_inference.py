@@ -1,1 +1,1 @@
-#here is the inference
+#here is the inference of svm

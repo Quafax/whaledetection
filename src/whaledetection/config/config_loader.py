@@ -1,5 +1,5 @@
 import yaml
-from whaledetection.config.config_types import padCfg,featureCfg,SwtCfg, rfCfg,AppCfg,MfccCfg,loadSignalCfg, loadDatabaseCfg, svmCfg, denoiseCfg
+from whaledetection.config.config_types import mlpCfg, padCfg,featureCfg,SwtCfg, rfCfg,AppCfg,MfccCfg,loadSignalCfg, loadDatabaseCfg, svmCfg, denoiseCfg
 from pathlib import Path
 
 def load_config(path: str | Path) -> AppCfg:
@@ -93,6 +93,33 @@ def load_config(path: str | Path) -> AppCfg:
     method = denoise_raw["method"]
     denoise = denoiseCfg(method=method)
 
+    mlp_raw = raw["mlp"]
+    random_state=mlp_raw["random_state"]
+    test_size=mlp_raw["test_size"]
+    model_dir_out=mlp_raw["model_dir_out"]
+    epochs=mlp_raw["epochs"]
+    patience=mlp_raw["patience"]
+    dropout=mlp_raw["dropout"]
+    hidden_1=mlp_raw["hidden_1"]
+    hidden_2=mlp_raw["hidden_2"]
+    hidden_3=mlp_raw["hidden_3"]
+    hidden_4=mlp_raw["hidden_4"]
+    batch_size=mlp_raw["batch_size"]
+    learning_rate=mlp_raw["learning_rate"]
+    mlp = mlpCfg(random_state=random_state,
+                 test_size=test_size,
+                 model_dir_out=model_dir_out,
+                 epochs=epochs,
+                 patience=patience,
+                 dropout=dropout,
+                 hidden_1=hidden_1,
+                 hidden_2=hidden_2,
+                 hidden_3=hidden_3,
+                 hidden_4=hidden_4,
+                 batch_size=batch_size,
+                 learning_rate=learning_rate,
+                 )
+
     return AppCfg(pad=pad,
                   swt=swt,
                   mfcc=mfcc,
@@ -101,4 +128,5 @@ def load_config(path: str | Path) -> AppCfg:
                   svm=svm,
                   rf=rf,
                   feature=feature,
-                  denoise=denoise)
+                  denoise=denoise,
+                  mlp=mlp)

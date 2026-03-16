@@ -1,0 +1,1 @@
+#here the plotting of different denoising methods like swt, noisereduce and swt with noiserecuse. Together with the different thresholdings like sureshrink, bayeshrink and visushrink. Could do percentile shrinking and garotte thresholding too

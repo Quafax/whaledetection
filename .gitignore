@@ -1,12 +1,23 @@
 # virtual env
 .venv/
-
+.venv
+venv
+env
 # python cache
 __pycache__/
 *.py[cod]
+*.pyc
 
 # packaging/build artifacts
 *.egg-info/
 build/
 dist/
 
+# vscode
+.vscode/
+
+# datasets
+data/
+
+# notebooks
+.ipynb_checkpoints

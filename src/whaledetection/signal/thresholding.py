@@ -1,3 +1,5 @@
+#probably percentile and garotte too??
+
 import numpy as np
 
 def MAD(signal):

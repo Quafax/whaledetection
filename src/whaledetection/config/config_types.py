@@ -17,6 +17,22 @@ class SwtCfg:
     wavelet:str
     axis: int
     level:int
+
+@dataclass
+class mlpCfg:
+    random_state: int
+    test_size: float
+    model_dir_out: str
+    epochs: int
+    batch_size: int
+    learning_rate: float
+    patience: int
+    dropout: float
+    hidden_1: int
+    hidden_2: int
+    hidden_3: int
+    hidden_4: int
+
 @dataclass
 class padCfg:
     pad_mode: str
@@ -66,3 +82,4 @@ class AppCfg:
     feature: featureCfg
     pad:padCfg
     denoise: denoiseCfg
+    mlp: mlpCfg
