@@ -7,7 +7,6 @@ import numpy as np
 import seaborn as sns
 from sklearn.metrics import ConfusionMatrixDisplay, confusion_matrix
 
-
 def plot_spectrogram(
     y,
     sr,
@@ -161,3 +160,53 @@ def plot_confusion_matrix_seaborn(
         save_path = Path(save_path)
         save_path.parent.mkdir(parents=True, exist_ok=True)
         plt.savefig(save_path, dpi=300, bbox_inches="tight")
+
+
+
+
+def plot_denoising_comparison(
+    signals,
+    sr,
+    titles,
+    save_path=None,
+    n_fft=2048,
+    hop_length=512,
+    figsize=(14, 3.5),
+    dpi=150,
+):
+    if len(signals) != len(titles):
+        raise ValueError("signals and titles must have the same length")
+
+    n = len(signals)
+    fig, axes = plt.subplots(n, 2, figsize=(figsize[0], figsize[1] * n), dpi=dpi)
+
+    if n == 1:
+        axes = np.array([axes])
+
+    for i, (signal, title) in enumerate(zip(signals, titles)):
+        signal = np.asarray(signal).reshape(-1)
+        time = np.arange(len(signal)) / sr
+
+        axes[i, 0].plot(time, signal, linewidth=0.7)
+        axes[i, 0].set_title(f"{title} - Waveform")
+        axes[i, 0].set_xlabel("Time (s)")
+        axes[i, 0].set_ylabel("Amplitude")
+        axes[i, 0].grid(True, alpha=0.3)
+
+        plot_spectrogram(
+            signal,
+            sr,
+            n_fft=n_fft,
+            hop_length=hop_length,
+            title=f"{title} - Spectrogram",
+            ax=axes[i, 1],
+            add_colorbar=False,
+        )
+
+    plt.tight_layout()
+
+
+    plt.savefig(save_path, dpi=300, bbox_inches="tight")
+    plt.close(fig)
+
+    return fig, axes

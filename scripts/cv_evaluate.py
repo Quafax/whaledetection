@@ -2,7 +2,7 @@ from pathlib import Path
 
 import numpy as np
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
-from sklearn.model_selection import StratifiedKFold
+from sklearn.model_selection import StratifiedKFold, train_test_split
 
 from whaledetection.config.config_loader import load_config
 from whaledetection.load_dataset import load_dataset
@@ -49,7 +49,21 @@ def main():
         rf_preds = predict_rf(rf_model, X_test)
         results["rf"].append(evaluate_predictions(y_test, rf_preds))
 
-        mlp_bundle = fit_mlp(X_train, y_train, cfg, X_val=X_test, y_val=y_test)
+        X_train_inner, X_val, y_train_inner, y_val = train_test_split(
+            X_train,
+            y_train,
+            test_size=cfg.mlp.test_size,
+            random_state=cfg.mlp.random_state,
+            stratify=y_train,
+        )
+
+        mlp_bundle = fit_mlp(
+            X_train_inner,
+            y_train_inner,
+            cfg,
+            X_val=X_val,
+            y_val=y_val,
+        )
         mlp_preds = predict_mlp(mlp_bundle, X_test)
         results["mlp"].append(evaluate_predictions(y_test, mlp_preds))
 
