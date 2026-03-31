@@ -1,10 +1,14 @@
 import librosa
 import numpy as np
+from whaledetection.signal.padding import pad_signal_for_delta
+
 valid_features = {"mfcc","delta","delta2"}
+
 def summarize(matrix):
     mean = np.mean(matrix, axis=1)
     std = np.std(matrix, axis=1)
     return np.concatenate([mean, std])
+
 
 def extract_mfcc_features(signal, sr, n_mfcc,frame_length,hop_length,n_fft,feature_set):
     feature_set = set(feature_set)
@@ -15,7 +19,17 @@ def extract_mfcc_features(signal, sr, n_mfcc,frame_length,hop_length,n_fft,featu
 
     if "mfcc" not in feature_set:
         raise ValueError("feature_set must include 'mfcc'")
-
+    
+    #padding if delta is used
+    if "delta" in feature_set or "delta2" in feature_set:
+        signal = pad_signal_for_delta(
+            signal=signal,
+            sr=sr,
+            frame_length=frame_length,
+            hop_length=hop_length,
+            n_fft=n_fft,
+            min_frames=9,
+        )
 
     mfcc = librosa.feature.mfcc(
         y=signal,
@@ -37,5 +51,6 @@ def extract_mfcc_features(signal, sr, n_mfcc,frame_length,hop_length,n_fft,featu
     if "delta2" in feature_set:
         delta2 = librosa.feature.delta(mfcc, order=2)
         parts.append(summarize(delta2))
+
     features = np.concatenate(parts).astype(np.float32)
     return features

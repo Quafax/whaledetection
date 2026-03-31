@@ -20,7 +20,7 @@ def main():
     print(f"Feature shape: {X.shape}")
 
     bundle, y_test, preds = train_model(X, y, cfg)
-
+    """
     plot_confusion_matrix(
         y_test,
         preds,
@@ -37,7 +37,7 @@ def main():
         save_path="results/mlp/mlp_confusion_matrix_seaborn.png",
         normalize=True,
     )
-
+    """
     model_dir = Path(cfg.mlp.model_dir_out)
     model_dir.mkdir(parents=True, exist_ok=True)
 

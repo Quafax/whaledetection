@@ -25,7 +25,7 @@ mlp:
 
 
 denoise:
-  method: "swt"
+  method: "none"
 pad:
   pad_mode: "reflect" #str
   
@@ -40,10 +40,10 @@ mfcc:
   n_mfcc: 13
   hop_length: 0.01
   n_fft: 2048
-  feature_set: ["mfcc"] # mfcc with delta, or delta2, vggish is not implemented yet
+  feature_set: ["mfcc", "delta","delta2"] # mfcc with delta, or delta2, vggish is not implemented yet
 loadDatabase:
   database_base_dir_in: ""
-  database_base_dir_out: "C:/Users/luede/Downloads/export_whales"
+  database_base_dir_out: "C:/Users/luede/Downloads/export_whales_whaleFM"
 
 svm:
   random_state: 42

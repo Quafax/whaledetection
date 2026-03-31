@@ -20,7 +20,7 @@ def main():
     print(f"Feature shape: {X.shape}")
 
     model, y_test, preds = train_model(X, y, cfg)
-
+    """
     plot_confusion_matrix(
         y_test,
         preds,
@@ -37,7 +37,7 @@ def main():
         save_path="results/rf/rf_confusion_matrix_seaborn.png",
         normalize=True,
     )
-
+    """
     model_path = Path("models/rf/random_forest_model.joblib")
     model_path.parent.mkdir(parents=True, exist_ok=True)
 

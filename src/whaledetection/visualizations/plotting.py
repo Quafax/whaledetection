@@ -121,7 +121,7 @@ def plot_confusion_matrix_seaborn(
     y_true,
     y_pred,
     class_names,
-    title="Confusion Matrix",
+    title=None,
     save_path=None,
     normalize=False,
 ):
@@ -147,8 +147,8 @@ def plot_confusion_matrix_seaborn(
         linecolor="lightgray",
         ax=ax,
     )
-
-    ax.set_title(title, fontsize=18, pad=20)
+    if title:
+        ax.set_title(title, fontsize=18, pad=20)
     ax.set_xlabel("Predicted label", fontsize=14)
     ax.set_ylabel("True label", fontsize=14)
 
@@ -210,3 +210,26 @@ def plot_denoising_comparison(
     plt.close(fig)
 
     return fig, axes
+
+def plot_mlp_history(history, save_prefix):
+    hist = history
+
+    plt.figure(figsize=(8, 5))
+    plt.plot(hist["loss"], label="Train loss")
+    plt.plot(hist["val_loss"], label="Validation loss")
+    plt.xlabel("Epoch")
+    plt.ylabel("Loss")
+    plt.legend()
+    plt.tight_layout()
+    plt.savefig(f"{save_prefix}_loss.pdf", bbox_inches="tight")
+    plt.close()
+
+    plt.figure(figsize=(8, 5))
+    plt.plot(hist["accuracy"], label="Train accuracy")
+    plt.plot(hist["val_accuracy"], label="Validation accuracy")
+    plt.xlabel("Epoch")
+    plt.ylabel("Accuracy")
+    plt.legend()
+    plt.tight_layout()
+    plt.savefig(f"{save_prefix}_accuracy.pdf", bbox_inches="tight")
+    plt.close()

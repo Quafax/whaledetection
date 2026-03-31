@@ -8,3 +8,4 @@ pip install -e .
 
 Windows ffmpeg:
 winget install ffmpeg
+restart enviroment after installation

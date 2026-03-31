@@ -19,6 +19,6 @@ def export_whaleFM():
 if __name__ == "__main__":
 
     #load the databases here. The loading is not fully automated on purpose so that modifications can be made
-    #export_whaleFM()
+    export_whaleFM()
     #export_watkins()
     pass

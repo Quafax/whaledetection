@@ -16,6 +16,7 @@ def main():
 
 
     model,y_test,preds = train_model(X, y, cfg)
+    """
     plot_confusion_matrix(
     y_test,
     preds,
@@ -32,6 +33,7 @@ def main():
     save_path="results/svm/svm_confusion_matrix_seaborn_mfcc_swt.png",
     normalize=True,
 )
+    """
 #make sure path exists
     model_path = Path(cfg.svm.model_dir_out)
     if model_path.suffix == "":
