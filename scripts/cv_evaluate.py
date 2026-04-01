@@ -15,9 +15,6 @@ from whaledetection.model.random_forest import fit_model as fit_rf, predict as p
 from whaledetection.model.svm import fit_model as fit_svm, predict as predict_svm
 from whaledetection.visualizations.plotting import plot_confusion_matrix_seaborn, plot_mlp_history
 
-cfg=load_config("configs/config.yaml")
-experiment= cfg.experiment.output_dir
-
 def save_cv_confusion_matrix(y_true, y_pred, classes, model_name, output_dir):
     plot_confusion_matrix_seaborn(
         y_true,
@@ -37,7 +34,8 @@ def evaluate_predictions(y_true, y_pred):
     }
 
 
-def main():
+def main(config_path: str = "configs/config.yaml"):
+    cfg = load_config(config_path)
     X, y, classes = load_dataset(cfg)
     print(f"Loaded {len(X)} samples with shape {X.shape}")
     print(f"Classes: {classes}")
@@ -54,8 +52,8 @@ def main():
         "rf": {"y_true": [], "y_pred": []},
         "mlp": {"y_true": [], "y_pred": []},
     }
-
-    output_dir = Path("results/cv/whalefm/mfcc_no_den")
+    #"results/cv/whalefm/mfcc_no_den"
+    output_dir = Path(cfg.experiment.output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
 
     for fold, (train_idx, test_idx) in enumerate(skf.split(X, y), start=1):

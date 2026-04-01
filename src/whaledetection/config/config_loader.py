@@ -136,4 +136,4 @@ def load_config(path: str | Path) -> AppCfg:
                   feature=feature,
                   denoise=denoise,
                   mlp=mlp,
-                  experiment=experiment)
+                  experiment=experiment,)

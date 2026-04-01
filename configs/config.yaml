@@ -61,4 +61,4 @@ feature:
   feature_type: "mfcc"
 
 experiment:
-  output_dir: ""
+  output_dir: "results/cv/tmp"
