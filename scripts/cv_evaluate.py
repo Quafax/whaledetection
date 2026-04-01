@@ -16,6 +16,7 @@ from whaledetection.model.svm import fit_model as fit_svm, predict as predict_sv
 from whaledetection.visualizations.plotting import plot_confusion_matrix_seaborn, plot_mlp_history
 
 cfg=load_config("configs/config.yaml")
+experiment= cfg.experiment.output_dir
 
 def save_cv_confusion_matrix(y_true, y_pred, classes, model_name, output_dir):
     plot_confusion_matrix_seaborn(
@@ -54,7 +55,7 @@ def main():
         "mlp": {"y_true": [], "y_pred": []},
     }
 
-    output_dir = Path("results/cv/mfcc_delta_delta2_no_den")
+    output_dir = Path("results/cv/whalefm/mfcc_no_den")
     output_dir.mkdir(parents=True, exist_ok=True)
 
     for fold, (train_idx, test_idx) in enumerate(skf.split(X, y), start=1):

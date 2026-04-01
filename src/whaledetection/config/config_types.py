@@ -73,6 +73,10 @@ class featureCfg:
     feature_type: str
 
 @dataclass
+class experimentCfg:
+    output_dir: str
+
+@dataclass
 class AppCfg:
     swt: SwtCfg
     mfcc:MfccCfg
@@ -84,3 +88,4 @@ class AppCfg:
     pad:padCfg
     denoise: denoiseCfg
     mlp: mlpCfg
+    experiment: experimentCfg

@@ -1,5 +1,5 @@
 import yaml
-from whaledetection.config.config_types import mlpCfg, padCfg,featureCfg,SwtCfg, rfCfg,AppCfg,MfccCfg,loadSignalCfg, loadDatabaseCfg, svmCfg, denoiseCfg
+from whaledetection.config.config_types import mlpCfg, padCfg,featureCfg,SwtCfg, rfCfg,AppCfg,MfccCfg,loadSignalCfg, loadDatabaseCfg, svmCfg, denoiseCfg, experimentCfg
 from pathlib import Path
 
 def load_config(path: str | Path) -> AppCfg:
@@ -121,6 +121,10 @@ def load_config(path: str | Path) -> AppCfg:
                  batch_size=batch_size,
                  learning_rate=learning_rate,
                  )
+    
+    experiment_raw = raw["experiment"]
+    output_dir = experiment_raw["output_dir"]
+    experiment = experimentCfg(output_dir=output_dir)
 
     return AppCfg(pad=pad,
                   swt=swt,
@@ -131,4 +135,5 @@ def load_config(path: str | Path) -> AppCfg:
                   rf=rf,
                   feature=feature,
                   denoise=denoise,
-                  mlp=mlp)
+                  mlp=mlp,
+                  experiment=experiment)
