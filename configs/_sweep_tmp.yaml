@@ -1,0 +1,58 @@
+swt:
+  level: 7
+  swt_frame_length: 2
+  swt_hop_ratio: 0.5
+  axis: -1
+  k: 1.4826
+  wavelet: db8
+  t_mode: sure
+  t_meth: soft
+  percentile: 80
+mlp:
+  random_state: 42
+  test_size: 0.2
+  model_dir_out: C:/Users/luede/Documents/Github/whaledetection/models/mlp
+  epochs: 50
+  patience: 8
+  dropout: 0.2
+  hidden_1: 512
+  hidden_2: 256
+  hidden_3: 128
+  hidden_4: 64
+  batch_size: 128
+  learning_rate: 0.001
+denoise:
+  method: swt
+pad:
+  pad_mode: reflect
+loadSignal:
+  sr: 44032
+  signal_base_dir_in: C:/Users/luede/Seafile/WhaleData
+  signal_base_dir_out: ''
+  species_list:
+  - Northern_Right_Whale
+mfcc:
+  tukey_alpha: 0.5
+  mfcc_frame_length: 0.025
+  n_mfcc: 13
+  hop_length: 0.01
+  n_fft: 2048
+  feature_set:
+  - mfcc
+loadDatabase:
+  database_base_dir_in: ''
+  database_base_dir_out: C:/Users/luede/Downloads/export_whales_whaleFM
+svm:
+  random_state: 42
+  kernel: rbf
+  model_dir_out: C:/Users/luede/Documents/Github/whaledetection/models/svm
+  test_size: 0.2
+rf:
+  random_state: 42
+  model_dir_out: C:/Users/luede/Documents/Github/whaledetection/models/rf
+  test_size: 0.2
+  estimators: 300
+feature:
+  feature_type: mfcc
+experiment:
+  output_dir: results/cv/watkins_threshold_sure_soft

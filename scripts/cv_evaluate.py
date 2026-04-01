@@ -1,6 +1,5 @@
 from pathlib import Path
 import numpy as np
-import matplotlib.pyplot as plt
 from sklearn.metrics import (
     accuracy_score,
     precision_score,
@@ -126,4 +125,6 @@ def main(config_path: str = "configs/config.yaml"):
 
 
 if __name__ == "__main__":
-    main()
+    import sys
+    config_path = sys.argv[1] if len(sys.argv) > 1 else "configs/config.yaml"
+    main(config_path)

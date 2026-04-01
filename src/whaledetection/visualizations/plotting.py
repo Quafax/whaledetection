@@ -1,3 +1,5 @@
+import matplotlib
+matplotlib.use("Agg")
 from pathlib import Path
 
 import librosa
@@ -115,6 +117,7 @@ def plot_confusion_matrix(
         save_path = Path(save_path)
         save_path.parent.mkdir(parents=True, exist_ok=True)
         plt.savefig(save_path, dpi=300, bbox_inches="tight")
+        plt.close()
 
 
 def plot_confusion_matrix_seaborn(
@@ -160,6 +163,7 @@ def plot_confusion_matrix_seaborn(
         save_path = Path(save_path)
         save_path.parent.mkdir(parents=True, exist_ok=True)
         plt.savefig(save_path, dpi=300, bbox_inches="tight")
+        plt.close()
 
 
 

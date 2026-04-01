@@ -1,8 +1,13 @@
+import matplotlib
+matplotlib.use("Agg")
 from copy import deepcopy
 from pathlib import Path
 import yaml
+import subprocess
+import sys
+import time
 
-from scripts.cv_evaluate import main as cv_main
+from cv_evaluate import main as cv_main
 
 BASE_CONFIG_PATH = Path("configs/config.yaml")
 TMP_CONFIG_PATH = Path("configs/_sweep_tmp.yaml")
@@ -94,9 +99,12 @@ def run_first_threshold_sweep() -> None:
         cfg["experiment"]["output_dir"] = job["output_dir"]
 
         save_yaml(TMP_CONFIG_PATH, cfg)
-
+        time.sleep(10)
         print(f"\n=== Running {job['dataset_name']} | {job['threshold_rule']} | soft ===")
-        cv_main(str(TMP_CONFIG_PATH))
+        subprocess.run(
+            [sys.executable, "scripts/cv_evaluate.py", str(TMP_CONFIG_PATH)],
+            check=True,
+)
 
 
 if __name__ == "__main__":
