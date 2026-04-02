@@ -40,7 +40,8 @@ def load_dataset(cfg):
                                         t_mode=cfg.swt.t_mode,
                                         thresholding=cfg.swt.t_meth,
                                         k=cfg.swt.k,
-                                        percentile=cfg.swt.percentile
+                                        percentile=cfg.swt.percentile,
+                                        threshold_scale=cfg.swt.threshold_scale
                                         )   
                 elif cfg.denoise.method.lower() == "noisereduce":
                     signal = nr.reduce_noise(signal, sr)

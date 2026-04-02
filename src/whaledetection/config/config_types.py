@@ -18,6 +18,7 @@ class SwtCfg:
     axis: int
     level:int
     percentile: float
+    threshold_scale: float
 
 @dataclass
 class mlpCfg:

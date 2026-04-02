@@ -12,7 +12,7 @@ def MAD_level_based(coeffs):
     return np.asarray(mads,dtype=float)
 
 def sigma_from_MAD(mads,k=1.4826):
-    return k* np.asarray(mads, dtype=float)
+    return k* np.asarray(mads, dtype=float)*0.5
 
 def visu_threshold(sigmas,signal_length):
     sigmas = np.asarray(sigmas,dtype=float)

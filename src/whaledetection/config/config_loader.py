@@ -45,6 +45,7 @@ def load_config(path: str | Path) -> AppCfg:
     t_meth=swt_raw["t_meth"]
     percentile=swt_raw["percentile"]
     axis=swt_raw["axis"]
+    threshold_scale =swt_raw["threshold_scale"]
     swt = SwtCfg(swt_frame_length=swt_frame_length,
                  swt_hop_ratio=swt_hop_ratio,
                  swt_hop_length=swt_hop_length,
@@ -54,7 +55,8 @@ def load_config(path: str | Path) -> AppCfg:
                  t_meth=t_meth,
                  axis=axis,
                  level=level,
-                 percentile=percentile)
+                 percentile=percentile,
+                 threshold_scale=threshold_scale)
 
     loadDatabase_raw = raw["loadDatabase"]
     database_base_dir_in = loadDatabase_raw["database_base_dir_in"]

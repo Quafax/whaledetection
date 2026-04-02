@@ -22,7 +22,8 @@ def swt_denoise(
         t_mode="visu",
         thresholding="soft",
         k=1.4826,
-        percentile=95.0
+        percentile=95.0,
+        threshold_scale = 1.0
         ):
     thresholding=thresholding.lower()
     if thresholding not in VALID_T_METHS:
@@ -41,9 +42,19 @@ def swt_denoise(
                                 signal_length=len(padded_signal),
                                 k=k,
                                 percentile=percentile)
+    thresholds = np.asarray(thresholds, dtype=float) * float(threshold_scale)
+    thresholds = np.nan_to_num(thresholds, nan=0.0, posinf=0.0, neginf=0.0)
+    thresholds = np.maximum(thresholds, 0.0)
     denoised_coeffs =[]
     for j, (cA, cD) in enumerate(coeffs):
-        cD_denoised = pywt.threshold(cD, value=thresholds[j], mode=thresholding)
+        T = float(thresholds[j])
+
+        if not np.isfinite(T) or T <= 0:
+            cD_denoised = np.asarray(cD, dtype=float).copy()
+        else:
+            cD_denoised = pywt.threshold(cD, value=T, mode=thresholding)
+
+        #cD_denoised = pywt.threshold(cD, value=thresholds[j], mode=thresholding)
         denoised_coeffs.append((cA, cD_denoised))
 
     denoised_signal = swt_reconstruct(coeffs=denoised_coeffs, wavelet=wavelet)

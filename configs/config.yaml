@@ -4,10 +4,11 @@ swt:
   swt_hop_ratio: 0.5 #float
   axis: -1 # int
   k: 1.4826 #float
-  wavelet: "db8" #str
+  wavelet: "db4" #str
   t_mode: "sure" #str
   t_meth: "soft" #str , hard or garotte?
   percentile: 80
+  threshold_scale: 1.0
 
 mlp:
   random_state: 42
@@ -25,22 +26,22 @@ mlp:
 
 
 denoise:
-  method: "none"
+  method: "swt" #swt or noisereduce
 pad:
   pad_mode: "reflect" #str
   
 loadSignal:
   sr: 44032 #int
-  signal_base_dir_in: "C:/Users/luede/Seafile/WhaleFM"
+  signal_base_dir_in: "C:/Users/luede/Seafile/WhaleData"
   signal_base_dir_out: ""
   species_list: ["Northern_Right_Whale"] #used in tests
 mfcc:
   tukey_alpha: 0.5 #float
-  mfcc_frame_length: 0.025
-  n_mfcc: 13
-  hop_length: 0.01
+  mfcc_frame_length: 0.025 # deafult 0.025
+  n_mfcc: 40
+  hop_length: 0.005
   n_fft: 2048
-  feature_set: ["mfcc","delta","delta2"] # mfcc with delta, or delta2, vggish is not implemented yet
+  feature_set: ["mfcc"] # mfcc with delta, or delta2, vggish is not implemented yet
 loadDatabase:
   database_base_dir_in: ""
   database_base_dir_out: "C:/Users/luede/Downloads/export_whales_whaleFM"
@@ -61,4 +62,4 @@ feature:
   feature_type: "mfcc"
 
 experiment:
-  output_dir: "results/cv/tmp"
+  output_dir: "results/cv/watkins_mfcc40_sure_Soft_fft2048_0.025_hop_0.005"
