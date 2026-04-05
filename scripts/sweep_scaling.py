@@ -34,11 +34,11 @@ def build_jobs():
     selected_hop_length = 0.01
     selected_wavelet = "db4"
 
-    scales = [1.0, 0.9, 0.8, 0.7, 0.6, 0.5]
+    scales =  [1.0,0.9,0.8,0.7,0.6,0.5]
 
     for scale in scales:
         scale_str = str(scale).replace(".", "_")
-
+        
         # threshold scaling
         jobs.append(
             {
@@ -51,21 +51,21 @@ def build_jobs():
                 "hop_length": selected_hop_length,
                 "wavelet": selected_wavelet,
                 "denoise_method": "swt",
-                "threshold_rule": "sure",
+                "threshold_rule": "bayes",
                 "shrinkage_rule": "soft",
                 "k": BASE_K,
                 "threshold_scale": scale,
                 "mode_name": "thresholdscale",
                 "output_dir": (
                     f"results/cv/"
-                    f"watkins_sure_soft_thresholdscale_{scale_str}"
+                    f"watkins_visu_soft_thresholdscale_{scale_str}"
                     f"_wavelet_{selected_wavelet}"
                     f"_mfcc{selected_n_mfcc}"
                     f"_fft{selected_n_fft}_{selected_win_length}_hop_{selected_hop_length}"
                 ),
             }
         )
-
+        
         # k scaling
         jobs.append(
             {
@@ -78,7 +78,7 @@ def build_jobs():
                 "hop_length": selected_hop_length,
                 "wavelet": selected_wavelet,
                 "denoise_method": "swt",
-                "threshold_rule": "sure",
+                "threshold_rule": "bayes",
                 "shrinkage_rule": "soft",
                 "k": BASE_K * scale,
                 "threshold_scale": 1.0,
@@ -86,7 +86,7 @@ def build_jobs():
                 "scale": scale,
                 "output_dir": (
                     f"results/cv/"
-                    f"watkins_sure_soft_kscaling_{scale_str}"
+                    f"watkins_visu_soft_kscaling_{scale_str}"
                     f"_wavelet_{selected_wavelet}"
                     f"_mfcc{selected_n_mfcc}"
                     f"_fft{selected_n_fft}_{selected_win_length}_hop_{selected_hop_length}"

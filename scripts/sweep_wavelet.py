@@ -26,7 +26,6 @@ def save_yaml(path: Path, data: dict) -> None:
 def build_jobs():
     jobs = []
 
-    # Here later the best parameters. after mfcc sweep and nfft weep
     selected_n_mfcc = 40
     selected_n_fft = 2048
     selected_win_length = 0.025

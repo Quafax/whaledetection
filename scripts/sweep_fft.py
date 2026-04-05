@@ -33,7 +33,7 @@ def build_jobs():
     ]
 
     fft_settings = [
-        {"n_fft": 1024, "win_length": 0.02, "hop_length": 0.01},
+        {"n_fft": 1024, "win_length": 0.0125, "hop_length": 0.01},
         {"n_fft": 2048, "win_length": 0.025,  "hop_length": 0.01},
         {"n_fft": 4096, "win_length": 0.05,   "hop_length": 0.01},
     ]
@@ -95,7 +95,7 @@ def run_fft_win_sweep() -> None:
         cfg["mfcc"]["feature_set"] = job["feature_set"]
         cfg["mfcc"]["n_mfcc"] = job["n_mfcc"]
         cfg["mfcc"]["n_fft"] = job["n_fft"]
-        cfg["mfcc"]["win_length"] = job["win_length"]
+        cfg["mfcc"]["mfcc_frame_length"] = job["win_length"]
         cfg["mfcc"]["hop_length"] = job["hop_length"]
 
         cfg["denoise"]["method"] = job["denoise_method"]

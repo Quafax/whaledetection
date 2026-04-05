@@ -3,9 +3,9 @@ swt:
   swt_frame_length: 2
   swt_hop_ratio: 0.5
   axis: -1
-  k: 1.4826
+  k: 0.7413
   wavelet: db4
-  t_mode: sure
+  t_mode: bayes
   t_meth: soft
   percentile: 80
   threshold_scale: 1.0
@@ -23,7 +23,7 @@ mlp:
   batch_size: 128
   learning_rate: 0.001
 denoise:
-  method: none
+  method: swt
 pad:
   pad_mode: reflect
 loadSignal:
@@ -37,10 +37,10 @@ mfcc:
   mfcc_frame_length: 0.025
   n_mfcc: 40
   hop_length: 0.01
-  n_fft: 1024
+  n_fft: 2048
   feature_set:
   - mfcc
-  win_length: 0.02
+  win_length: 0.025
 loadDatabase:
   database_base_dir_in: ''
   database_base_dir_out: C:/Users/luede/Downloads/export_whales_whaleFM
@@ -57,4 +57,4 @@ rf:
 feature:
   feature_type: mfcc
 experiment:
-  output_dir: results/cv/watkins_mfcc40_raw_fft1024_0.02_hop_0.01
+  output_dir: results/cv/watkins_visu_soft_kscaling_0_5_wavelet_db4_mfcc40_fft2048_0.025_hop_0.01
