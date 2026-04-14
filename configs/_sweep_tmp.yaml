@@ -3,10 +3,10 @@ swt:
   swt_frame_length: 2
   swt_hop_ratio: 0.5
   axis: -1
-  k: 0.7413
+  k: 1.4826
   wavelet: db4
-  t_mode: bayes
-  t_meth: soft
+  t_mode: percentile
+  t_meth: garrote
   percentile: 80
   threshold_scale: 1.0
 mlp:
@@ -28,7 +28,7 @@ pad:
   pad_mode: reflect
 loadSignal:
   sr: 44032
-  signal_base_dir_in: C:/Users/luede/Seafile/WhaleData
+  signal_base_dir_in: C:/Users/luede/Seafile/WhaleFM
   signal_base_dir_out: ''
   species_list:
   - Northern_Right_Whale
@@ -40,6 +40,8 @@ mfcc:
   n_fft: 2048
   feature_set:
   - mfcc
+  - delta
+  - delta2
   win_length: 0.025
 loadDatabase:
   database_base_dir_in: ''
@@ -57,4 +59,4 @@ rf:
 feature:
   feature_type: mfcc
 experiment:
-  output_dir: results/cv/watkins_visu_soft_kscaling_0_5_wavelet_db4_mfcc40_fft2048_0.025_hop_0.01
+  output_dir: results/cv/whalefm_final_percentile_garrote_wavelet_db4_mfcc40_fft2048_0.025_hop_0.01
